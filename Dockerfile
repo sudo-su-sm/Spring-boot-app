@@ -1,4 +1,5 @@
-FROM openjdk:8
+FROM eclipse-temurin:8-jdk
+WORKDIR /app
+COPY target/*.jar /app/myapp.jar
 EXPOSE 8080
-ADD target/docker-automation.jar docker-automation.jar
-ENTRYPOINT ["java","-jar","/docker-automation.jar"]
+ENTRYPOINT ["java", "-jar", "myapp.jar"]
