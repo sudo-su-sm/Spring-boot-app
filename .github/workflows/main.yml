@@ -19,14 +19,14 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Run GitLeaks scan
-        uses: zricethezav/gitleaks-action@v4
+        uses: zricethezav/gitleaks-action@v1.3.0
         with:
           args: detect --source . --report-path gitleaks-report.json --redact || true
 
           ## || true is used to prevent the action from failing the workflow in case leaks are found as its just testing purpose here.
       
       - name: Upload Gitleaks report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: gitleaks-report
           path: gitleaks-report.json
