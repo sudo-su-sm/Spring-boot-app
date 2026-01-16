@@ -1,4 +1,4 @@
-name: Docker Build and Push
+name: Build and Push
 
 on:
   push:
@@ -10,7 +10,68 @@ env:
   IMAGE_NAME: awslinux88/docker-automation
 
 jobs:
+
+  Gitleaks-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Run GitLeaks scan
+        uses: zricethezav/gitleaks-action@v1.3.0
+        with:
+          args: detect --source . --report-path gitleaks-report.json --redact || true
+
+          ## || true is used to prevent the action from failing the workflow in case leaks are found as its just testing purpose here.
+      
+      - name: Upload Gitleaks report
+        uses: actions/upload-artifact@v3
+        with:
+          name: gitleaks-report
+          path: gitleaks-report.json
+
+          ## location of the artifact to be uploaded in workflow run and artifact name.
+
+  OWASP-Dependency-Check:
+    needs: Gitleaks-scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run OWASP Dependency Check
+        uses: jeremylong/owasp-dependency-check-action@main
+        with:
+          project: 'MyProject'  ## Name of the project
+          scan: './'           ## Scanning the entire repository
+          format: 'ALL'    ## Generate all report formats
+          out: 'dependency-check-report'  ## Output directory for reports
+
+      - name: Upload Dependency Check report
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-check-report
+          path: dependency-check-report
+  
+  # SonarQube-Scan:
+  #   needs: OWASP-Dependency-Check
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+
+  #     - name: SonarQube Scan
+  #       uses: sonarsource/sonarcloud-github-action@v2
+  #       with:
+  #         projectBaseDir: .    ## Directory to scan
+  #       env:
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  ## SonarQube token stored in GitHub secrets
+
   build-and-push:
+    needs: OWASP-Dependency-Check
     runs-on: ubuntu-latest
 
     steps:
