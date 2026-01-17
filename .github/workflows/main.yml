@@ -21,9 +21,10 @@ jobs:
       - name: Run GitLeaks scan
         uses: zricethezav/gitleaks-action@v1.3.0
         with:
-          args: detect --source . --report-path gitleaks-report.json --redact || true
+          command: detect --source . --report-path gitleaks-report.json --redact
+        continue-on-error: true
 
-          ## || true is used to prevent the action from failing the workflow in case leaks are found as its just testing purpose here.
+          ## continue-on-error is used to prevent the action from failing the workflow in case leaks are found as its just testing purpose here.
       
       - name: Upload Gitleaks report
         uses: actions/upload-artifact@v4
@@ -89,6 +90,7 @@ jobs:
                 -Dsonar.projectKey=your_project_key=sudo-su-sm_Spring-boot-app
                 -Dsonar.organization=sudo-su-sm
         env:
+          SONAR_HOST_URL: http://localhost:9000  ## SonarQube server URL
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  ## SonarQube token stored in GitHub secrets
 
   # build-and-push:
