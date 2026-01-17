@@ -33,7 +33,47 @@ jobs:
 
           ## location of the artifact to be uploaded in workflow run and artifact name.
 
-  OWASP-Dependency-Check:
+  # OWASP-Dependency-Check:
+  #   needs: Gitleaks-scan
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+
+  #     - name: Cache OWASP Dependency-Check data
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: ~/.dependency-check
+  #         key: dependency-check-${{ runner.os }}
+  #         restore-keys: |
+  #           dependency-check-
+
+  #     - name: Run OWASP Dependency Check
+  #       timeout-minutes: 30
+  #       uses: dependency-check/Dependency-Check_Action@main
+  #       with:
+  #         project: "MyProject"
+  #         path: "."
+  #         format: "ALL"
+  #         out: "dependency-check-report"
+  #         args: >
+  #           --failOnCVSS 11
+  #           --enableExperimental
+  #           --scan .
+
+  #     - name: Debug report directory
+  #       run: ls -lh dependency-check-report || true
+
+  #     - name: Upload Dependency Check report
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: dependency-check-report
+  #         path: dependency-check-report
+  #         if-no-files-found: error
+
+  
+  SonarQube-Scan:
     needs: Gitleaks-scan
     runs-on: ubuntu-latest
 
@@ -41,55 +81,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Cache OWASP Dependency-Check data
-        uses: actions/cache@v4
+      - name: SonarQube Scan
+        uses: sonarsource/sonarcloud-github-action@v2
         with:
-          path: ~/.dependency-check
-          key: dependency-check-${{ runner.os }}
-          restore-keys: |
-            dependency-check-
-
-      - name: Run OWASP Dependency Check
-        timeout-minutes: 30
-        uses: dependency-check/Dependency-Check_Action@main
-        with:
-          project: "MyProject"
-          path: "."
-          format: "ALL"
-          out: "dependency-check-report"
-          args: >
-            --failOnCVSS 11
-            --enableExperimental
-            --scan .
-
-      - name: Debug report directory
-        run: ls -lh dependency-check-report || true
-
-      - name: Upload Dependency Check report
-        uses: actions/upload-artifact@v4
-        with:
-          name: dependency-check-report
-          path: dependency-check-report
-          if-no-files-found: error
-
-  
-  # SonarQube-Scan:
-  #   needs: OWASP-Dependency-Check
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-
-  #     - name: SonarQube Scan
-  #       uses: sonarsource/sonarcloud-github-action@v2
-  #       with:
-  #         projectBaseDir: .    ## Directory to scan
-  #         args: > 
-  #               -Dsonar.projectKey=your_project_key=sudo-su-sm_Spring-boot-app
-  #               -Dsonar.organization=sudo-su-sm
-  #       env:
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  ## SonarQube token stored in GitHub secrets
+          projectBaseDir: .    ## Directory to scan
+          args: > 
+                -Dsonar.projectKey=your_project_key=sudo-su-sm_Spring-boot-app
+                -Dsonar.organization=sudo-su-sm
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  ## SonarQube token stored in GitHub secrets
 
   # build-and-push:
   #   needs: OWASP-Dependency-Check
