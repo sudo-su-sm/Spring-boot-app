@@ -40,6 +40,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      
+      - name: Create Dependency Check report directory
+        run: mkdir -p dependency-check-report
 
       - name: Run OWASP Dependency Check
         run: |
