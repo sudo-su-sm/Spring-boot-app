@@ -62,6 +62,7 @@ jobs:
         with:
           name: dependency-check-report
           path: dependency-check-report
+          if-no-files-found: error
   
   # SonarQube-Scan:
   #   needs: OWASP-Dependency-Check
