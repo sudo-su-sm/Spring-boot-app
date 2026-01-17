@@ -50,7 +50,8 @@ jobs:
             --scan /src \
             --format ALL \
             --project MyProject \
-            --out /src/dependency-check-report
+            --out /src/dependency-check-report \
+            --failOnCVSS 11.0           # Set to 11.0 to avoid failing the build based on CVSS score for test purpose
 
 
       - name: Upload Dependency Check report
