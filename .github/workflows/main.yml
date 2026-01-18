@@ -76,7 +76,7 @@ jobs:
   
   SonarQube-Scan:
 
-    runs-on: sonar
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repository
