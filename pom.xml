@@ -56,6 +56,12 @@
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>
 			</plugin>
+			<!-- ===== Add Sonar Maven Plugin ===== -->
+	        <plugin>
+	            <groupId>org.sonarsource.scanner.maven</groupId>
+	            <artifactId>sonar-maven-plugin</artifactId>
+	            <version>5.5.0.6356</version>
+	        </plugin>
 		</plugins>
 		<finalName>docker-automation</finalName>
 	</build>
