@@ -10,9 +10,7 @@ pipeline {
 
         stage('build code using maven'){
             steps {
-                withDockerContainer('maven:3.9.9-eclipse-temurin-17-alpine') {
                     sh 'mvn clean package'
-                }
             }
         }
 
