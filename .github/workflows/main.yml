@@ -76,7 +76,7 @@ jobs:
   
   SonarQube-Scan:
 
-    runs-on: ubuntu-latest
+    runs-on: sonar
 
     steps:
       - name: Checkout repository
