@@ -11,7 +11,7 @@ pipeline {
         stage('Gitleaks scan'){
             steps {
                 sh 'docker run --rm -v $(pwd):/repo zricethezav/gitleaks:latest detect /repo --no-git'
-                # archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
+                // archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
             }
         }
 
