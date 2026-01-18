@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Gitleaks scan'){
             steps {
-                sh 'docker run --rm -v $(pwd):/repo zricethezav/gitleaks:latest detect /repo --no-git'
+                sh 'gitleaks detect --source=. --report-path=gitleaks-report.json || true'
                 // archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
             }
         }
