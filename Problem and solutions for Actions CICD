@@ -1,0 +1,59 @@
+### **1️⃣ Error: `No plugin found for prefix 'sonar'`**
+
+**Cause:**
+
+* `pom.xml` did not include the `sonar-maven-plugin`. Maven couldn’t recognize `sonar:sonar`.
+
+**Solution:**
+
+* Add the plugin in `<build><plugins>`:
+
+```xml
+<plugin>
+  <groupId>org.sonarsource.scanner.maven</groupId>
+  <artifactId>sonar-maven-plugin</artifactId>
+  <version>5.5.0.6356</version>
+</plugin>
+```
+
+---
+
+### **2️⃣ Error: `HTTP 403: Please check sonar.token`**
+
+**Cause:**
+
+* SonarCloud rejected the token. Either it was missing, invalid, or lacked permissions.
+
+**Solution:**
+
+* Create a **SonarCloud token** with Execute Analysis permissions.
+* Add it to **GitHub Secrets** as `SONAR_TOKEN`.
+* Use it in your workflow:
+
+```yaml
+env:
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+```
+
+---
+
+### **3️⃣ Error: `You are running CI analysis while Automatic Analysis is enabled`**
+
+**Cause:**
+
+* SonarCloud project had **Automatic Analysis enabled**, which conflicts with your CI workflow running `mvn sonar:sonar`.
+
+**Solution:**
+
+* Go to **SonarCloud project settings → Analysis Method** and **disable Automatic Analysis**.
+* Keep your GitHub Actions step with Maven scan — now it runs successfully.
+
+---
+
+✅ **Key takeaways:**
+
+1. Always include the **Sonar Maven plugin** in `pom.xml` for CI scans.
+2. Ensure your **SONAR_TOKEN is valid and added as a secret**.
+3. Don’t run **CI analysis** while **Automatic Analysis** is enabled on SonarCloud. Disable one of them.
+
+---
