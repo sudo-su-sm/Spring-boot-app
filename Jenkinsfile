@@ -8,6 +8,14 @@ pipeline {
             }
         }
 
+        stage('build code using maven'){
+            steps {
+                withDockerContainer('maven:3.9.9-eclipse-temurin-17-alpine') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
 //         stage('OWASP Dependency Check Scan'){
 //             steps {
 //                 sh 'dependency-check.sh --project "spring-boot-app" --scan . --format "ALL" --out . || true'
@@ -15,13 +23,6 @@ pipeline {
 //             }
 //         }
 
-//         stage('build code using maven'){
-//             steps {
-//                 withDockerContainer('maven:3.9.9-eclipse-temurin-17-alpine') {
-//                     sh 'mvn clean package'
-//                 }
-//             }
-//         }
 
 //         stage('docker build image'){
 //             steps{
