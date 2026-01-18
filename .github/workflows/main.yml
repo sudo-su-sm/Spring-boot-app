@@ -83,12 +83,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@v2
-        with:
-          projectBaseDir: .    ## Directory to scan
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  ## SonarQube server URL
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  ## SonarQube token stored in GitHub secrets
+        run: |        # we have not used sonarsource/sonarqube-scan-action as we were havinf dockersock issue .. if we given permission to user through wich we are running sonar (github user temp)
+           mvn clean verify sonar:sonar \
+            -Dsonar.projectKey=spring-boot-app
 
   # build-and-push:
   #   needs: OWASP-Dependency-Check
