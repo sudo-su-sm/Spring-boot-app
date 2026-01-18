@@ -1,13 +1,6 @@
 pipeline {
     agent any
     stages {
-
-        stage('checkout code from github'){
-            steps {
-                git branch: 'main', url: 'https://github.com/sudo-su-sm/spring-boot-app.git'
-            }
-        }
-
         stage('Gitleaks scan'){
             steps {
                 sh 'docker run --rm -v $(pwd):/repo zricethezav/gitleaks:latest detect /repo --no-git'
