@@ -76,20 +76,20 @@ jobs:
   
   SonarQube-Scan:
 
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@v2
-        with:
-          args: >
-            -Dsonar.projectKey=Spring-boot-app
+      - uses: actions/checkout@v4
+      
+      - name: SonarCloud Scan
         env:
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  ## SonarQube server URL
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  ## SonarQube token stored in GitHub secrets
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn clean verify sonar:sonar \
+            -Dsonar.projectKey=sudo-su-sm_Spring-boot-app \
+            -Dsonar.organization=sudo-su-sm \
+            -Dsonar.host.url=https://sonarcloud.io
 
   # build-and-push:
   #   needs: OWASP-Dependency-Check
