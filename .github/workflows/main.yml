@@ -81,6 +81,18 @@ jobs:
     steps:
 
       - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: m2-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
       
       - name: SonarCloud Scan
         env:
