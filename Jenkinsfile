@@ -18,7 +18,7 @@ pipeline {
 
         stage('OWASP Dependency Check Scan'){
             steps {
-                sh 'dependency-check.sh --project "spring-boot-app" --scan . --format "ALL" --out .'
+                sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'
                 // archiveArtifacts artifacts: 'dependency-check-report.*', allowEmptyArchive: true
             }
         }
