@@ -16,17 +16,13 @@ pipeline {
             }
         }
 
-        stage('OWASP Dependency-Check Vulnerabilities') {
+        stage('OWASP Dependency Check Scan'){
             steps {
-                dependencyCheck additionalArguments: ''' 
-                            -o './'
-                            -s './'
-                            -f 'ALL' 
-                            --prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
-                
-                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+                sh 'dependency-check.sh --project "spring-boot-app" --scan . --format "ALL" --out .'
+                // archiveArtifacts artifacts: 'dependency-check-report.*', allowEmptyArchive: true
             }
-            }
+        }
+
 
 
 //         stage('docker build image'){
