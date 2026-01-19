@@ -8,6 +8,13 @@ pipeline {
             }
         }
 
+        stage('OWASP Dependency Check Scan'){
+            steps {
+                sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'
+                // archiveArtifacts artifacts: 'dependency-check-report.*', allowEmptyArchive: true
+            }
+        }
+
         stage('build code using maven'){
             steps {
                 // withDockerContainer('maven:3.9.9-eclipse-temurin-17-alpine') {   ## This can be used if you have docker and docker pipeline plugin installed on jenkins server
@@ -16,20 +23,27 @@ pipeline {
             }
         }
 
-        stage('OWASP Dependency Check Scan'){
+        stage('SonarQube Analysis') {
             steps {
-                sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'
-                // archiveArtifacts artifacts: 'dependency-check-report.*', allowEmptyArchive: true
+                withSonarQubeEnv('SonarQubeServer') {
+                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=sudo-su-sm_Spring-boot-app -Dsonar.organization=sudo-su-sm'
+                }
             }
         }
 
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
 
-
-//         stage('docker build image'){
-//             steps{
-//                 sh ' docker build -t awslinux88/docker-automation:v1 . '
-//             }
-//         }
+        // stage('docker build image'){
+        //     steps{
+        //         sh ' docker build -t awslinux88/docker-automation:v1 . '
+        //     }
+        // }
 
 //         stage('docker push image to docker hub'){
 //             steps{
