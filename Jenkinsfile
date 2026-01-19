@@ -16,12 +16,12 @@ pipeline {
             }
         }
 
-//         stage('OWASP Dependency Check Scan'){
-//             steps {
-//                 sh 'dependency-check.sh --project "spring-boot-app" --scan . --format "ALL" --out . || true'
-//                 archiveArtifacts artifacts: 'dependency-check-report.*', allowEmptyArchive: true
-//             }
-//         }
+        stage('OWASP Dependency Check Scan'){
+            steps {
+                sh 'dependency-check.sh --project "spring-boot-app" --scan . --format "ALL" --out . || true'
+                // archiveArtifacts artifacts: 'dependency-check-report.*', allowEmptyArchive: true
+            }
+        }
 
 
 //         stage('docker build image'){
