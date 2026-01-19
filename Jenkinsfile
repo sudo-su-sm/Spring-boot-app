@@ -45,13 +45,12 @@ pipeline {
             }
         }
 
-//         stage('docker push image to docker hub'){
-//             steps{
-//                 withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
-//                  sh ' docker push awslinux88/docker-automation:v1 '
-//                 }
-                
-//             }
-//         }
+        stage('docker push image to docker hub'){
+            steps{
+                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
+                 sh ' docker push awslinux88/docker-automation:v1 '
+                }
+            }
+        }
     }
 } 
