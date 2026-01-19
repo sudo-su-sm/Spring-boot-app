@@ -41,7 +41,14 @@ pipeline {
 
         stage('docker build image'){
             steps{
-                sh ' docker build -t awslinux88/docker-automation:v1 . '
+                sh ' docker build -t awslinux88/docker-automation:${BUILD_NUMBER} . '
+            }
+        }
+
+        stage('Trivy Image Scan') {
+            steps {
+                sh "trivy image --format json -o trivy-report.json awslinux88/docker-automation:v1:${BUILD_NUMBER} || true"
+                // archiveArtifacts 'trivy-report.json'
             }
         }
 
