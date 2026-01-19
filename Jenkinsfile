@@ -39,11 +39,11 @@ pipeline {
             }
         }
 
-        // stage('docker build image'){
-        //     steps{
-        //         sh ' docker build -t awslinux88/docker-automation:v1 . '
-        //     }
-        // }
+        stage('docker build image'){
+            steps{
+                sh ' docker build -t awslinux88/docker-automation:v1 . '
+            }
+        }
 
 //         stage('docker push image to docker hub'){
 //             steps{
